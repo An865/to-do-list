@@ -1,29 +1,34 @@
+//jQuery Object of DOM element with id of "#list"
 let list = $('#list');
 
 //reorder list
 list.sortable();
 
-//listen to list and add strike through list items that are clicked
+//Cross item off of list when double clicked
 list.on('dblclick', (e)=>{
     $(e.target).toggleClass('strike');
 });
 
-//when crossoutbutton is pushed it should remove an item from the list
+//Delete item when cross out button is pushed
 list.on('click', (e)=>{
-    let eventTarget = $(e.target)
-    let parent =   eventTarget.parent();
-    parent.remove();
+    if($(e.target).is('crossOutButton')){
+        let parent =   $(e.target).parent();
+        parent.remove();
+    }
 });
 
-//add button to list item
+//add cross out button to new list item
 function addButton(){
-    let li = $('<li></li>');
-    console.log(li);
+    //get last list item
+    let li = $('li:last');
     let crossOut = '<crossOutButton>X</crossOutButton>';
-    li.append(crossOut);
+    //if last list item doesn't have X button then add one
+    if($('li').find('crossout').length < 1){
+        li.append(crossOut);
+    }
 }
 
-
+//function to add new list item
 function addLi(){
     let input = $('input');
     if(input.val() === ''){
@@ -34,16 +39,5 @@ function addLi(){
         addButton();
     }
 }
-
-//add new list item
-// function addLi(){
-//     if(input.val() === ''){
-//         alert('You must input something');
-//     } else {
-//         let newElement = '<li>' +  input.val() + '<crossoutbutton> X </crossoutbutton></li>';
-//         list.append(newElement);
-//         console.log(crossout);
-//     }
-// }
 
 $('#button').on('click',  addLi);
